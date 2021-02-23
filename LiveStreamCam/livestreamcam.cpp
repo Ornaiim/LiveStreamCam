@@ -13,7 +13,6 @@ LiveStreamCam::LiveStreamCam(QWidget *parent)
     frameTimer = new QTimer(this);
     recordTimer = new QTimer(this);
     videoTime = new QTime(0, 0, 0);
-    videoPath = "";
 
     // Center window on screen
     move(QGuiApplication::screens().at(0)->geometry().center() - frameGeometry().center());

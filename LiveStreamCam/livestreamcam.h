@@ -22,7 +22,6 @@ public:
     int getVideoCaptureHeight(cv::VideoCapture cap);
     const QString getCurrentDateAndTime();
     const QString getVideoFolder();
-    //void getVideoFolder();
 
 public slots:
     void updateFrame();
@@ -39,7 +38,6 @@ private:
     QTime* videoTime;
 
     QImage qFrame;
-    QString videoPath;
 
     const int MAX_CAMERA = 5;
     int numActiveCamera;

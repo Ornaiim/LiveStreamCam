@@ -208,5 +208,4 @@ const QString LiveStreamCam::getVideoFolder()
 {
     // Get User Videos path of the device (compatible Windows, Linux, Mac)
     return QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
-    //return videoPath;
 }

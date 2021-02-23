@@ -13,6 +13,7 @@ LiveStreamCam::LiveStreamCam(QWidget *parent)
     frameTimer = new QTimer(this);
     recordTimer = new QTimer(this);
     videoTime = new QTime(0, 0, 0);
+    videoPath = "";
 
     // Center window on screen
     move(QGuiApplication::screens().at(0)->geometry().center() - frameGeometry().center());
@@ -27,7 +28,7 @@ void LiveStreamCam::setButtons()
 {
     // Set up widgets visibility
     ui.chronoLabel->setVisible(false);
-    ui.recordButton->setIcon(QIcon("Icons/VideoIcon.png"));
+    ui.recordButton->setIcon(QIcon(":/LiveStreamCam/Icons/VideoIcon.png"));
     ui.captureButton->setVisible(true);
 
     if (numActiveCamera > 1) 
@@ -36,7 +37,7 @@ void LiveStreamCam::setButtons()
     }    
 }
 
-void LiveStreamCam::openCamera(cv::VideoCapture cap, int cameraNumber)
+void LiveStreamCam::openCamera(int cameraNumber)
 {
     // Open and set a new max size (default 480p)
     capture.open(cameraNumber);
@@ -53,12 +54,12 @@ void LiveStreamCam::nextCamera()
     {
         activeCamera = 0;
     }
-    openCamera(capture, activeCamera);
+    openCamera(activeCamera);
 }
 
 void LiveStreamCam::launchCamera()
 {
-    openCamera(capture, activeCamera);
+    openCamera(activeCamera);
 
     // If no camera is found
     if (!capture.isOpened())
@@ -95,26 +96,11 @@ void LiveStreamCam::updateFrame()
         video.write(frame);
     }
 
-    // Conversion from OpenCV Mat type to QImage
-    qFrame = QImage((uchar*)frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+    ui.openGLWidget->displayImage(frame);       // Display VideoCapture frames from QOpenGLWidget
+    ui.openGLWidget->setMinimumSize(250, 200);  // Set a minimum size to QOpenGLWidget
 
-    if (!qFrame.isNull())
-    {
-        // Convert BGR to RGB colours
-        qFrame = std::move(qFrame).rgbSwapped();
-
-        // Set Pixmap to display qFrame images into QLabel
-        pixmap = QPixmap::fromImage(qFrame).scaled(ui.cameraLabel->size(), Qt::KeepAspectRatio);
-        ui.cameraLabel->setPixmap(pixmap);
-        ui.cameraLabel->resize(qFrame.size());                                                      // Resize QLabel to qFrame size
-        ui.cameraLabel->setMinimumSize(250, 200);                                                   // Set a minimum size to QLabel to resize the main window
-        ui.cameraLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);                          // Center Qlabel
-    }
-    else
-    {
-        qCritical() << "Error: Cannot display the image";
-        return;
-    }  
+    qFrame = ui.openGLWidget->getOGLImage();    // Get QImage from QOpenGLWidget
+    qFrame = std::move(qFrame).rgbSwapped();    // BGR to RGB conversion
 }
 
 void LiveStreamCam::captureCamera()
@@ -143,7 +129,7 @@ void LiveStreamCam::toggleRecord()
     // Start recording and set up UI
     if (isRecording)
     {
-        ui.recordButton->setIcon(QIcon("Icons/RecordingIcon.png"));
+        ui.recordButton->setIcon(QIcon(":/LiveStreamCam/Icons/RecordingIcon.png"));
         ui.chronoLabel->setVisible(true);
         ui.captureButton->setVisible(false);
         ui.nextCameraButton->setVisible(false);
@@ -167,10 +153,10 @@ void LiveStreamCam::toggleRecord()
 
 void LiveStreamCam::recordVideo()
 {
-    int fcc = cv::VideoWriter::fourcc('H','2','6','4');                                  // Video codec initialization (types: H264, MJPG, DVIX...)
+    int fcc = cv::VideoWriter::fourcc('D','I','V','X');                                  // Video codec initialization (types: H264, MJPG, DIVX...)
     int fps = 20;                                                                        // Set video FPS
     cv::Size frameSize(getVideoCaptureWidth(capture), getVideoCaptureHeight(capture));   // Get the resolution of the video
-    QString file = getCurrentDateAndTime() + ".mp4";                                     // File name + .mp4 type
+    QString file = getCurrentDateAndTime() + ".avi";                                     // File name + .avi type
     const cv::String filename = file.toStdString();                                      // Convert QString to const cv::String
     const cv::String path = getVideoFolder().toStdString();
     video = cv::VideoWriter(path + "/" + filename, fcc, fps, frameSize, true);           // Save video with given arguments, coloured = true, greyscale otherwise
@@ -223,4 +209,5 @@ const QString LiveStreamCam::getVideoFolder()
 {
     // Get User Videos path of the device (compatible Windows, Linux, Mac)
     return QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
+    //return videoPath;
 }

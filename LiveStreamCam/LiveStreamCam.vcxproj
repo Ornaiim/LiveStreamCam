@@ -43,14 +43,27 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>C:\opencv-4.5.1\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\opencv-4.5.1\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\opencv-4.5.1\opencv\build\include;C:\Users\romai\source\externals\GLFW64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\opencv-4.5.1\opencv\build\x64\vc15\lib;C:\Users\romai\source\externals\GLFW64\lib-vc2019;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <IncludePath>C:\opencv-4.5.1\opencv\build\include;C:\Users\romai\source\externals\GLFW64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\opencv-4.5.1\opencv\build\x64\vc15\lib;C:\Users\romai\source\externals\GLFW64\lib-vc2019;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>opencv_world451d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world451d.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../../externals/GLEW/include;$(SolutionDir)/../../externals/GLFW64/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../../externals/GLEW/include;$(SolutionDir)/../../externals/GLFW64/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>opencv_world451.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
@@ -108,12 +121,15 @@
     <QtMoc Include="livestreamcam.h" />
     <ClCompile Include="livestreamcam.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtMoc Include="OpenGLQWidget.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClCompile Include="OpenGLQWidget.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <QtUic Include="OpenGLQWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiveStreamCam.rc" />

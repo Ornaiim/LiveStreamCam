@@ -9,4 +9,3 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 TEMPLATE = subdirs
 SUBDIRS += LiveStreamCam/LiveStreamCam.pro \
-    LiveStreamCam/x64/Debug/qmake/temp/qtvars.pro

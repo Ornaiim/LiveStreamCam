@@ -13,17 +13,18 @@ public:
     LiveStreamCam(QWidget *parent = Q_NULLPTR);
 
     void setButtons();
-    void openCamera(cv::VideoCapture cap, int cameraNumber);
-    int validCamera(cv::VideoCapture cap);
+    void openCamera(int cameraNumber);
+    void launchCamera();
     void recordVideo();
 
+    int validCamera(cv::VideoCapture cap);
     int getVideoCaptureWidth(cv::VideoCapture cap);
     int getVideoCaptureHeight(cv::VideoCapture cap);
     const QString getCurrentDateAndTime();
     const QString getVideoFolder();
+    //void getVideoFolder();
 
 public slots:
-    void launchCamera();
     void updateFrame();
     void nextCamera();
     void captureCamera();
@@ -38,7 +39,7 @@ private:
     QTime* videoTime;
 
     QImage qFrame;
-    QPixmap pixmap;
+    QString videoPath;
 
     const int MAX_CAMERA = 5;
     int numActiveCamera;

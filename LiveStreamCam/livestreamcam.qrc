@@ -1,4 +1,8 @@
 <RCC>
-    <qresource prefix="LiveStreamCam">
+    <qresource prefix="/LiveStreamCam">
+        <file>Icons/CameraIcon.png</file>
+        <file>Icons/RecordingIcon.png</file>
+        <file>Icons/SwitchIcon.png</file>
+        <file>Icons/VideoIcon.png</file>
     </qresource>
 </RCC>

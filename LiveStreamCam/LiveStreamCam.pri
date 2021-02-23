@@ -9,9 +9,12 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 HEADERS += ./resource.h \
     ./stdafx.h \
-    ./livestreamcam.h
+    ./livestreamcam.h \
+    ./OpenGLQWidget.h
 SOURCES += ./livestreamcam.cpp \
     ./main.cpp \
+    ./OpenGLQWidget.cpp \
     ./stdafx.cpp
-FORMS += ./livestreamcam.ui
+FORMS += ./livestreamcam.ui \
+    ./OpenGLQWidget.ui
 RESOURCES += livestreamcam.qrc

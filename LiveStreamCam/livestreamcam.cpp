@@ -152,7 +152,7 @@ void LiveStreamCam::toggleRecord()
 
 void LiveStreamCam::recordVideo()
 {
-    int fcc = cv::VideoWriter::fourcc('D','I','V','X');                                  // Video codec initialization (types: H264, MJPG, DIVX...)
+    int fcc = cv::VideoWriter::fourcc('M','J','P','G');                                  // Video codec initialization (types: H264, MJPG, DIVX...)
     int fps = 20;                                                                        // Set video FPS
     cv::Size frameSize(getVideoCaptureWidth(capture), getVideoCaptureHeight(capture));   // Get the resolution of the video
     QString file = getCurrentDateAndTime() + ".avi";                                     // File name + .avi type

@@ -3,10 +3,12 @@ TARGET = LiveStreamCam
 DESTDIR = ../x64/Debug
 CONFIG += debug
 INCLUDEPATH += OPENCV\include
-LIBS += -L"C:\Users\romai\source\repos\LiveStreamCam\LiveStreamCam\OPENCV\lib"
+LIBS += -L"$$PWD\OPENCV\lib"
 LIBS += -lopencv_world451d
 LIBS += -lOpengl32
 QT += opengl
+DEFINES += CAFFE_CONFIG_FILE=\\\"$$PWD/OPENCV/model/deploy.prototxt\\\"
+DEFINES += CAFFE_WEIGHTS_FILE=\\\"$$PWD/OPENCV/model/res10_300x300_ssd_iter_140000_fp16.caffemodel\\\"
 DEPENDPATH += .
 MOC_DIR += .
 OBJECTS_DIR += debug

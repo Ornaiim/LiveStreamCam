@@ -8,10 +8,12 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 
 HEADERS += ./resource.h \
+    $$PWD/facedetection.h \
     ./stdafx.h \
     ./livestreamcam.h \
     ./OpenGLQWidget.h
 SOURCES += ./livestreamcam.cpp \
+    $$PWD/facedetection.cpp \
     ./main.cpp \
     ./OpenGLQWidget.cpp \
     ./stdafx.cpp

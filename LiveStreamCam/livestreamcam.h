@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_livestreamcam.h"
 #include <QDebug>
+#include "facedetection.h"
 
 class LiveStreamCam : public QMainWindow
 {
@@ -46,4 +47,6 @@ private:
 
     cv::VideoCapture capture;
     cv::VideoWriter video;
+
+    FaceDetection faceDetection;
 };

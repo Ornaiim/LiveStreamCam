@@ -95,6 +95,12 @@ void LiveStreamCam::updateFrame()
         video.write(frame);
     }
 
+    // Draw face detection when not in video recording mode
+    if (!isRecording)
+    {
+        faceDetection.drawDetection(frame);
+    }
+
     ui.openGLWidget->displayImage(frame);       // Display VideoCapture frames from QOpenGLWidget
     ui.openGLWidget->setMinimumSize(250, 200);  // Set a minimum size to QOpenGLWidget
 
@@ -118,6 +124,8 @@ void LiveStreamCam::captureCamera()
 
     // Restart the timer once the user has saved or closed the dialog window
     frameTimer->start();
+
+    // TO DO: Hide face detection during capture
 }
 
 void LiveStreamCam::toggleRecord()

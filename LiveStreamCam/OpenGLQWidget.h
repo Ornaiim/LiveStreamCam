@@ -3,6 +3,8 @@
 #include <QOpenGLWidget>
 #include "opencv2/opencv.hpp"
 #include <QDebug>
+#include <QImage>
+#include <vector>
 
 class OpenGLQWidget : public QOpenGLWidget
 {

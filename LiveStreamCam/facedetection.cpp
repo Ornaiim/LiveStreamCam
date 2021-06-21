@@ -15,11 +15,33 @@ FaceDetection::FaceDetection() :
         throw std::invalid_argument(msg.str());
     }
 
-    // Use GPU if available, using OPENCL
-    network.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
-    network.setPreferableTarget(cv::dnn::DNN_TARGET_OPENCL);
+    // Set network target and backend
+    // Check if device GPU supports CUDA
+    auto GPUinfo = cv::cuda::DeviceInfo();
+    if (!GPUinfo.isCompatible())
+    {
+       qDebug() << "WARNING: CUDA is not available !";
+       // Set target to OPENCL if available...
+       if(cv::ocl::haveOpenCL())
+       {
+           network.setPreferableTarget(cv::dnn::DNN_TARGET_OPENCL);
+           qDebug() << "Target set to OPENCL";
+       }
+       // ... to CPU otherwise
+       else
+       {
+           network.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
+           qDebug() << "Target set to CPU";
+       }
 
-    // TO DO: build DNN module with CUDA for faster performances
+       network.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
+    }
+    else
+    {
+       network.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
+       network.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+       qDebug() << "CUDA Enabled";
+    }
 }
 
 std::vector<cv::Rect> FaceDetection::detectFace(const cv::Mat &frame)

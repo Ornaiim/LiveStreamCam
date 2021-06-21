@@ -8,12 +8,22 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 # Import target "opencv_world" for configuration "Debug"
 set_property(TARGET opencv_world APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(opencv_world PROPERTIES
-  IMPORTED_IMPLIB_DEBUG "${_IMPORT_PREFIX}/x64/vc15/lib/opencv_world451d.lib"
-  IMPORTED_LOCATION_DEBUG "${_IMPORT_PREFIX}/x64/vc15/bin/opencv_world451d.dll"
+  IMPORTED_IMPLIB_DEBUG "${_IMPORT_PREFIX}/x64/vc16/lib/opencv_world452d.lib"
+  IMPORTED_LOCATION_DEBUG "${_IMPORT_PREFIX}/x64/vc16/bin/opencv_world452d.dll"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS opencv_world )
-list(APPEND _IMPORT_CHECK_FILES_FOR_opencv_world "${_IMPORT_PREFIX}/x64/vc15/lib/opencv_world451d.lib" "${_IMPORT_PREFIX}/x64/vc15/bin/opencv_world451d.dll" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_opencv_world "${_IMPORT_PREFIX}/x64/vc16/lib/opencv_world452d.lib" "${_IMPORT_PREFIX}/x64/vc16/bin/opencv_world452d.dll" )
+
+# Import target "opencv_img_hash" for configuration "Debug"
+set_property(TARGET opencv_img_hash APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+set_target_properties(opencv_img_hash PROPERTIES
+  IMPORTED_IMPLIB_DEBUG "${_IMPORT_PREFIX}/x64/vc16/lib/opencv_img_hash452d.lib"
+  IMPORTED_LOCATION_DEBUG "${_IMPORT_PREFIX}/x64/vc16/bin/opencv_img_hash452d.dll"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS opencv_img_hash )
+list(APPEND _IMPORT_CHECK_FILES_FOR_opencv_img_hash "${_IMPORT_PREFIX}/x64/vc16/lib/opencv_img_hash452d.lib" "${_IMPORT_PREFIX}/x64/vc16/bin/opencv_img_hash452d.dll" )
 
 # Commands beyond this point should not need to know the version.
 set(CMAKE_IMPORT_FILE_VERSION)

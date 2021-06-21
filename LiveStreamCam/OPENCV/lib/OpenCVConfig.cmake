@@ -25,10 +25,10 @@
 #      - OpenCV_INCLUDE_DIRS             : The OpenCV include directories.
 #      - OpenCV_COMPUTE_CAPABILITIES     : The version of compute capability.
 #      - OpenCV_ANDROID_NATIVE_API_LEVEL : Minimum required level of Android API.
-#      - OpenCV_VERSION                  : The version of this OpenCV build: "4.5.1"
+#      - OpenCV_VERSION                  : The version of this OpenCV build: "4.5.2"
 #      - OpenCV_VERSION_MAJOR            : Major version part of OpenCV_VERSION: "4"
 #      - OpenCV_VERSION_MINOR            : Minor version part of OpenCV_VERSION: "5"
-#      - OpenCV_VERSION_PATCH            : Patch version part of OpenCV_VERSION: "1"
+#      - OpenCV_VERSION_PATCH            : Patch version part of OpenCV_VERSION: "2"
 #      - OpenCV_VERSION_STATUS           : Development status of this build: ""
 #
 #    Advanced variables:
@@ -45,10 +45,10 @@
 # ======================================================
 #  Version variables:
 # ======================================================
-SET(OpenCV_VERSION 4.5.1)
+SET(OpenCV_VERSION 4.5.2)
 SET(OpenCV_VERSION_MAJOR  4)
 SET(OpenCV_VERSION_MINOR  5)
-SET(OpenCV_VERSION_PATCH  1)
+SET(OpenCV_VERSION_PATCH  2)
 SET(OpenCV_VERSION_TWEAK  0)
 SET(OpenCV_VERSION_STATUS "")
 
@@ -93,6 +93,62 @@ if(NOT COMMAND find_host_program)
 endif()
 
 
+# Version Compute Capability from which OpenCV has been compiled is remembered
+set(OpenCV_COMPUTE_CAPABILITIES "-gencode;arch=compute_75,code=sm_75;-D_FORCE_INLINES")
+
+set(OpenCV_CUDA_VERSION "11.1")
+set(OpenCV_USE_CUBLAS   "1")
+set(OpenCV_USE_CUFFT    "1")
+set(OpenCV_USE_NVCUVID  "")
+
+set(OpenCV_CUDNN_VERSION    "8.2.1")
+set(OpenCV_USE_CUDNN        "1")
+
+if(NOT CUDA_FOUND)
+  find_host_package(CUDA ${OpenCV_CUDA_VERSION} EXACT REQUIRED)
+else()
+  if(NOT CUDA_VERSION_STRING VERSION_EQUAL OpenCV_CUDA_VERSION)
+    message(FATAL_ERROR "OpenCV static library was compiled with CUDA ${OpenCV_CUDA_VERSION} support. Please, use the same version or rebuild OpenCV with CUDA ${CUDA_VERSION_STRING}")
+  endif()
+endif()
+
+set(OpenCV_CUDA_LIBS_ABSPATH ${CUDA_LIBRARIES})
+
+if(CUDA_VERSION VERSION_LESS "5.5")
+  list(APPEND OpenCV_CUDA_LIBS_ABSPATH ${CUDA_npp_LIBRARY})
+else()
+  find_cuda_helper_libs(nppc)
+  find_cuda_helper_libs(nppi)
+  find_cuda_helper_libs(npps)
+  list(APPEND OpenCV_CUDA_LIBS_ABSPATH ${CUDA_nppc_LIBRARY} ${CUDA_nppi_LIBRARY} ${CUDA_npps_LIBRARY})
+endif()
+
+if(OpenCV_USE_CUBLAS)
+  list(APPEND OpenCV_CUDA_LIBS_ABSPATH ${CUDA_CUBLAS_LIBRARIES})
+endif()
+
+if(OpenCV_USE_CUFFT)
+  list(APPEND OpenCV_CUDA_LIBS_ABSPATH ${CUDA_CUFFT_LIBRARIES})
+endif()
+
+if(OpenCV_USE_NVCUVID)
+  list(APPEND OpenCV_CUDA_LIBS_ABSPATH ${CUDA_nvcuvid_LIBRARIES})
+endif()
+
+if(WIN32)
+  list(APPEND OpenCV_CUDA_LIBS_ABSPATH ${CUDA_nvcuvenc_LIBRARIES})
+endif()
+
+set(OpenCV_CUDA_LIBS_RELPATH "")
+foreach(l ${OpenCV_CUDA_LIBS_ABSPATH})
+  get_filename_component(_tmp ${l} PATH)
+  if(NOT ${_tmp} MATCHES "-Wl.*")
+    list(APPEND OpenCV_CUDA_LIBS_RELPATH ${_tmp})
+  endif()
+endforeach()
+
+list(REMOVE_DUPLICATES OpenCV_CUDA_LIBS_RELPATH)
+link_directories(${OpenCV_CUDA_LIBS_RELPATH})
 
 
 
@@ -105,7 +161,7 @@ set(OpenCV_SHARED ON)
 # Enables mangled install paths, that help with side by side installs
 set(OpenCV_USE_MANGLED_PATHS FALSE)
 
-set(OpenCV_LIB_COMPONENTS opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_gapi;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio;opencv_world)
+set(OpenCV_LIB_COMPONENTS opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_gapi;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio;opencv_world;opencv_aruco;opencv_barcode;opencv_bgsegm;opencv_bioinspired;opencv_ccalib;opencv_cudaarithm;opencv_cudabgsegm;opencv_cudacodec;opencv_cudafeatures2d;opencv_cudafilters;opencv_cudaimgproc;opencv_cudalegacy;opencv_cudaobjdetect;opencv_cudaoptflow;opencv_cudastereo;opencv_cudawarping;opencv_cudev;opencv_datasets;opencv_dnn_objdetect;opencv_dnn_superres;opencv_dpm;opencv_face;opencv_fuzzy;opencv_hfs;opencv_img_hash;opencv_intensity_transform;opencv_line_descriptor;opencv_mcc;opencv_optflow;opencv_phase_unwrapping;opencv_plot;opencv_quality;opencv_rapid;opencv_reg;opencv_rgbd;opencv_saliency;opencv_shape;opencv_stereo;opencv_structured_light;opencv_superres;opencv_surface_matching;opencv_text;opencv_tracking;opencv_videostab;opencv_wechat_qrcode;opencv_xfeatures2d;opencv_ximgproc;opencv_xobjdetect;opencv_xphoto)
 set(__OpenCV_INCLUDE_DIRS "${OpenCV_INSTALL_PATH}/include")
 
 set(OpenCV_INCLUDE_DIRS "")
@@ -195,7 +251,7 @@ if(NOT OpenCV_FIND_COMPONENTS)
   endif()
 endif()
 
-set(OpenCV_WORLD_COMPONENTS opencv_calib3d;opencv_core;opencv_dnn;opencv_features2d;opencv_flann;opencv_gapi;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_ml;opencv_objdetect;opencv_photo;opencv_stitching;opencv_video;opencv_videoio)
+set(OpenCV_WORLD_COMPONENTS opencv_aruco;opencv_barcode;opencv_bgsegm;opencv_bioinspired;opencv_calib3d;opencv_ccalib;opencv_core;opencv_cudaarithm;opencv_cudabgsegm;opencv_cudacodec;opencv_cudafeatures2d;opencv_cudafilters;opencv_cudaimgproc;opencv_cudalegacy;opencv_cudaobjdetect;opencv_cudaoptflow;opencv_cudastereo;opencv_cudawarping;opencv_cudev;opencv_datasets;opencv_dnn;opencv_dnn_objdetect;opencv_dnn_superres;opencv_dpm;opencv_face;opencv_features2d;opencv_flann;opencv_fuzzy;opencv_gapi;opencv_hfs;opencv_highgui;opencv_imgcodecs;opencv_imgproc;opencv_intensity_transform;opencv_line_descriptor;opencv_mcc;opencv_ml;opencv_objdetect;opencv_optflow;opencv_phase_unwrapping;opencv_photo;opencv_plot;opencv_quality;opencv_rapid;opencv_reg;opencv_rgbd;opencv_saliency;opencv_shape;opencv_stereo;opencv_stitching;opencv_structured_light;opencv_superres;opencv_surface_matching;opencv_text;opencv_tracking;opencv_video;opencv_videoio;opencv_videostab;opencv_wechat_qrcode;opencv_xfeatures2d;opencv_ximgproc;opencv_xobjdetect;opencv_xphoto)
 
 # expand short module names and see if requested components exist
 foreach(__cvcomponent ${OpenCV_FIND_COMPONENTS})

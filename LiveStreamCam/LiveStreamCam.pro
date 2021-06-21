@@ -1,10 +1,14 @@
 TEMPLATE = app
 TARGET = LiveStreamCam
-DESTDIR = ../x64/Debug
-CONFIG += debug
 INCLUDEPATH += OPENCV\include
 LIBS += -L"$$PWD\OPENCV\lib"
-LIBS += -lopencv_world451d
+CONFIG(debug, debug|release) {
+LIBS += -lopencv_world452d
+DESTDIR = ../x64/Debug
+}else{
+LIBS += -lopencv_world452
+DESTDIR = ../x64/Release
+}
 LIBS += -lOpengl32
 QT += opengl
 DEFINES += CAFFE_CONFIG_FILE=\\\"$$PWD/OPENCV/model/deploy.prototxt\\\"

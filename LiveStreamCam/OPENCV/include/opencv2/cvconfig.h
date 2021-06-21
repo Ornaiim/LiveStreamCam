@@ -11,10 +11,10 @@
 /* #undef CV_DISABLE_OPTIMIZATION */
 
 /* Compile for 'real' NVIDIA GPU architectures */
-#define CUDA_ARCH_BIN ""
+#define CUDA_ARCH_BIN " 75"
 
 /* NVIDIA GPU features are used */
-#define CUDA_ARCH_FEATURES ""
+#define CUDA_ARCH_FEATURES " 75"
 
 /* Compile for 'virtual' NVIDIA PTX architectures */
 #define CUDA_ARCH_PTX ""
@@ -32,16 +32,16 @@
 /* #undef HAVE_COCOA */
 
 /* NVIDIA CUDA Runtime API*/
-/* #undef HAVE_CUDA */
+#define HAVE_CUDA
 
 /* NVIDIA CUDA Basic Linear Algebra Subprograms (BLAS) API*/
-/* #undef HAVE_CUBLAS */
+#define HAVE_CUBLAS
 
 /* NVIDIA CUDA Deep Neural Network (cuDNN) API*/
-/* #undef HAVE_CUDNN */
+#define HAVE_CUDNN
 
 /* NVIDIA CUDA Fast Fourier Transform (FFT) API*/
-/* #undef HAVE_CUFFT */
+#define HAVE_CUFFT
 
 /* DirectX */
 #define HAVE_DIRECTX
@@ -110,7 +110,7 @@
 #define HAVE_OPENEXR
 
 /* OpenGL support*/
-/* #undef HAVE_OPENGL */
+#define HAVE_OPENGL
 
 /* PNG codec */
 #define HAVE_PNG

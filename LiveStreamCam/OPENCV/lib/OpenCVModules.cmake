@@ -4,7 +4,7 @@ if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.5)
    message(FATAL_ERROR "CMake >= 2.6.0 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.6)
+cmake_policy(VERSION 2.6...3.17)
 #----------------------------------------------------------------
 # Generated CMake target import file.
 #----------------------------------------------------------------
@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget opencv_world)
+foreach(_expectedTarget opencv_world opencv_img_hash)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -52,6 +52,17 @@ endif()
 
 # Create imported target opencv_world
 add_library(opencv_world SHARED IMPORTED)
+
+# Create imported target opencv_img_hash
+add_library(opencv_img_hash SHARED IMPORTED)
+
+set_target_properties(opencv_img_hash PROPERTIES
+  INTERFACE_LINK_LIBRARIES "opencv_world"
+)
+
+if(CMAKE_VERSION VERSION_LESS 2.8.12)
+  message(FATAL_ERROR "This file relies on consumers using CMake 2.8.12 or greater.")
+endif()
 
 # Load information for each installed configuration.
 get_filename_component(_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)

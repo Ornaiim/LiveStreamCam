@@ -1,9 +1,11 @@
 #pragma once
 
 #include "opencv2/opencv.hpp"
+
 #include <QtWidgets/QMainWindow>
-#include "ui_livestreamcam.h"
 #include <QDebug>
+
+#include "ui_livestreamcam.h"
 #include "facedetection.h"
 
 class LiveStreamCam : public QMainWindow

@@ -1,10 +1,15 @@
 #ifndef FACEDETECTION_H
 #define FACEDETECTION_H
-#include <opencv2/dnn.hpp>
-#include <opencv2/opencv.hpp>
+
+#include "opencv2/dnn.hpp"
+#include "opencv2/opencv.hpp"
+#include "opencv2/core/ocl.hpp"
+#include "opencv2/core/cuda.hpp"
+
 #include <vector>
 #include <string>
 #include <sstream>
+#include <QDebug>
 
 
 class FaceDetection
@@ -29,7 +34,6 @@ private:
 
     // Mean values of the trained network
     const cv::Scalar meanValues;
-
 };
 
 #endif // FACEDETECTION_H

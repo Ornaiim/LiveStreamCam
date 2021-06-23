@@ -1,9 +1,12 @@
 #pragma once
 
 #include <QOpenGLWidget>
-#include "opencv2/opencv.hpp"
 #include <QDebug>
 #include <QImage>
+
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
 #include <vector>
 
 class OpenGLQWidget : public QOpenGLWidget

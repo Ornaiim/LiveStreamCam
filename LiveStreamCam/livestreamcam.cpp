@@ -9,6 +9,7 @@ LiveStreamCam::LiveStreamCam(QWidget *parent)
 
     activeCamera = 0;
     isRecording = false;
+    isCapturing = false;
     numActiveCamera = validCamera(capture);
     frameTimer = new QTimer(this);
     recordTimer = new QTimer(this);
@@ -94,10 +95,9 @@ void LiveStreamCam::updateFrame()
     {
         video.write(frame);
     }
-
-    // Draw face detection when not in video recording mode
-    if (!isRecording)
+    else if(!isCapturing)
     {
+        // Draw face detection when not in video recording or capture modes
         faceDetection.drawDetection(frame);
     }
 
@@ -110,8 +110,11 @@ void LiveStreamCam::updateFrame()
 
 void LiveStreamCam::captureCamera()
 {
+    isCapturing = true;
+
     // Pause VideoCapture timer to get the wanted picture
     frameTimer->stop();
+    updateFrame();
 
     // Set image file resolution to the VideoCapture size
     int imageWidth = getVideoCaptureWidth(capture);
@@ -125,7 +128,7 @@ void LiveStreamCam::captureCamera()
     // Restart the timer once the user has saved or closed the dialog window
     frameTimer->start();
 
-    // TO DO: Hide face detection during capture
+    isCapturing = false;
 }
 
 void LiveStreamCam::toggleRecord()

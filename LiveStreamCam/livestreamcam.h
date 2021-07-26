@@ -46,6 +46,7 @@ private:
     int numActiveCamera;
     int activeCamera;
     bool isRecording;
+    bool isCapturing;
 
     cv::VideoCapture capture;
     cv::VideoWriter video;
